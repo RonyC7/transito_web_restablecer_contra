@@ -132,78 +132,85 @@
         </div>
             
             <script type="module">
-                import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-                const supabaseUrl = 'https://ertgodureebmsejgaovn.supabase.co';
-                const supabaseKey = 'sb_publishable_U0q7bPNwTNHU6rvNaJ1fWg_hhdz-xOT';
-                const supabase = createClient(supabaseUrl, supabaseKey);
+  const supabaseUrl = 'https://ertgodureebmsejgaovn.supabase.co';
+  const supabaseKey = 'sb_publishable_U0q7bPNwTNHU6rvNaJ1fWg_hhdz-xOT';
 
-                const params = new URLSearchParams(window.location.search);
-                const code = params.get('code');
+  const supabase = createClient(supabaseUrl, supabaseKey, {
+    auth: {
+      flowType: 'pkce',
+      detectSessionInUrl: true,
+      persistSession: false,
+    },
+  });
 
-                const form = document.getElementById('form');
-                const passwordInput = document.getElementById('password');
-                const confirmInput = document.getElementById('confirm');
-                const messageE1 = document.getElementById('message');
-                const btn = document.getElementById('btn');
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get('code');
 
-                function setMessage(text, type) {
-                    messageE1.textContent = text;
-                    messageE1.className = 'msg ' + (type || '');
-                }
+  const form = document.getElementById('form');
+  const passwordInput = document.getElementById('password');
+  const confirmInput = document.getElementById('confirm');
+  const messageEl = document.getElementById('message');
+  const btn = document.getElementById('btn');
 
-                if(!code) {
-                  setMessage(
-                    "Enlace inválido o incompleto. \nVuelve a solicitar el restablecimiento desde la aplicación móvil.",
-                    "error"
-                  );
-                  form.style.display = "none";
-                } else {
-                  form.addEventListener("submit", async (e) => {
-                    e.preventDefault();
+  function setMessage(text, type) {
+    messageEl.textContent = text;
+    messageEl.className = 'msg ' + (type || '');
+  }
 
-                    const pass = passwordInput.value.trim();
-                    const confirm = confirmInput.value.trim();
+  if (!code) {
+    setMessage(
+      'Enlace inválido o incompleto.\nVuelve a solicitar el restablecimiento desde la aplicación móvil.',
+      'error'
+    );
+    form.style.display = 'none';
+  } else {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
 
-                    if (pass.length < 6) {
-                        setMessage('Las contraseñas debe tener al menos 6 caracteres.', 'error');
-                        return;
-                    }
-                    if (pass !== confirm) {
-                        setMessage("Las contraseñas no coinciden.", "error");
-                        return;
-                    }
+      const pass = passwordInput.value.trim();
+      const confirm = confirmInput.value.trim();
 
-                    btn.disabled = true;
-                    setMessage("Actualizando contraseña...", "");
+      if (pass.length < 6) {
+        setMessage(
+          'La contraseña debe tener al menos 6 caracteres.',
+          'error'
+        );
+        return;
+      }
 
-                    const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
-                    if (exchangeError) {
-                        setMessage(
-                            "El enlace ya no es valido o ha expirado. \nVuelve a solicitar el restablecimiento desde la aplicación móvil.",
-                            "error"
-                        );
-                        btn.disabled = false;
-                        return;
-                    }
+      if (pass !== confirm) {
+        setMessage('Las contraseñas no coinciden.', 'error');
+        return;
+      }
 
-                    const { error: updateError } = await supabase.auth.updateUser({
-                        password: pass,
-                    });
+      btn.disabled = true;
+      setMessage('Actualizando contraseña...', '');
 
-                    if (updateError) {
-                        setMessage("Ocurrió un error al actualizar la contraseña.", "error");
-                        btn.disabled = false;
-                        return;
-                    }
+      // YA NO hacemos exchangeCodeForSession(code)
+      const { error: updateError } = await supabase.auth.updateUser({
+        password: pass,
+      });
 
-                    setMessage(
-                        "Contraseña actualizada correctamente. \nPuedes cerrar esta ventana y volver a la aplicación móvil para iniciar sesión.",
-                        "ok"
-                    );
-                    form.style.display = "none";
-                  });
-                }
-            </script>
+      if (updateError) {
+        console.error('updateUser error', updateError);
+        setMessage(
+          'El enlace ya no es válido o ha expirado.\nVuelve a solicitar el restablecimiento desde la aplicación móvil.',
+          'error'
+        );
+        btn.disabled = false;
+        return;
+      }
+
+      setMessage(
+        'Contraseña actualizada correctamente.\nPuedes cerrar esta ventana y volver a la aplicación móvil para iniciar sesión.',
+        'ok'
+      );
+      form.style.display = 'none';
+    });
+  }
+</script>
+
     </body>
 </html>
