@@ -189,12 +189,28 @@
           btn.disabled = true;
           setMessage("Actualizando contraseña...", "");
 
-          const { error: exchangeError } =
+          const { data, error: exchangeError } =
             await supabase.auth.exchangeCodeForSession(code);
 
-          if (exchangeError) {
+          if (exchangeError || !data || !data.session) {
             setMessage(
               "El enlace ya no es válido o ha expirado.\nVuelve a solicitar el restablecimiento desde la aplicación móvil.",
+              "error"
+            );
+            btn.disabled = false;
+            return;
+          }
+
+          const session = data.session;
+
+          const { error: setError } = await supabase.auth.setSession({
+            access_token: session.access_token,
+            refresh_token: session.refresh_token,
+          });
+
+          if (setError) {
+            setMessage(
+              "Ocurrió un problema al iniciar la sesión para el restablecimiento.\nVuelve a solicitar el enlace desde la aplicación móvil.",
               "error"
             );
             btn.disabled = false;
