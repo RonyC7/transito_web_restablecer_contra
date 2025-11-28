@@ -2,11 +2,12 @@
 <html lang="es">
   <head>
     <meta charset="utf-8" />
-    <title>Restablecer contraseña - Transito La Esperanza</title>
+    <title>Restablecer contraseña - Tránsito La Esperanza</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
       body {
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, "segoe UI", sans-serif;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "segoe UI",
+          sans-serif;
         background: #f4faf5;
         display: flex;
         align-items: center;
@@ -127,7 +128,8 @@
       </div>
 
       <div class="footer">
-        Sistema de reportes y monitoreo de tránsito . Municipalidad de la esperanza
+        Sistema de reportes y monitoreo de tránsito . Municipalidad de la
+        esperanza
       </div>
     </div>
 
@@ -135,19 +137,21 @@
       import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
       const supabaseUrl = "https://ertgodureebmsejgaovn.supabase.co";
-      const supabaseKey = "sb_publishable_U0q7bPNwTNHU6rvNaJ1fWg_hhdz-xOT";
+      const supabaseKey =
+        "sb_publishable_U0q7bPNwTNHU6rvNaJ1fWg_hhdz-xOT";
 
       const supabase = createClient(supabaseUrl, supabaseKey, {
         auth: {
           flowType: "pkce",
-          detectSessionInUrl: false,
-          persistSession: false,
           autoRefreshToken: false,
+          detectSessionInUrl: false,
+          persistSession: true,
         },
       });
 
       const params = new URLSearchParams(window.location.search);
-      const code = params.get("code");
+      const tokenHash = params.get("token_hash");
+      const type = params.get("type");
 
       const form = document.getElementById("form");
       const passwordInput = document.getElementById("password");
@@ -155,12 +159,14 @@
       const messageEl = document.getElementById("message");
       const btn = document.getElementById("btn");
 
+      let verified = false;
+
       function setMessage(text, type) {
         messageEl.textContent = text;
         messageEl.className = "msg " + (type || "");
       }
 
-      if (!code) {
+      if (!tokenHash || type !== "recovery") {
         setMessage(
           "Enlace inválido o incompleto.\nVuelve a solicitar el restablecimiento desde la aplicación móvil.",
           "error"
@@ -189,32 +195,23 @@
           btn.disabled = true;
           setMessage("Actualizando contraseña...", "");
 
-          const { data, error: exchangeError } =
-            await supabase.auth.exchangeCodeForSession(code);
+          if (!verified) {
+            const { data, error: verifyError } =
+              await supabase.auth.verifyOtp({
+                type: "recovery",
+                token_hash: tokenHash,
+              });
 
-          if (exchangeError || !data || !data.session) {
-            setMessage(
-              "El enlace ya no es válido o ha expirado.\nVuelve a solicitar el restablecimiento desde la aplicación móvil.",
-              "error"
-            );
-            btn.disabled = false;
-            return;
-          }
+            if (verifyError || !data || !data.session) {
+              setMessage(
+                "El enlace ya no es válido o ha expirado.\nVuelve a solicitar el restablecimiento desde la aplicación móvil.",
+                "error"
+              );
+              btn.disabled = false;
+              return;
+            }
 
-          const session = data.session;
-
-          const { error: setError } = await supabase.auth.setSession({
-            access_token: session.access_token,
-            refresh_token: session.refresh_token,
-          });
-
-          if (setError) {
-            setMessage(
-              "Ocurrió un problema al iniciar la sesión para el restablecimiento.\nVuelve a solicitar el enlace desde la aplicación móvil.",
-              "error"
-            );
-            btn.disabled = false;
-            return;
+            verified = true;
           }
 
           const { error: updateError } = await supabase.auth.updateUser({
@@ -223,7 +220,7 @@
 
           if (updateError) {
             setMessage(
-              "Ocurrió un error al actualizar la contraseña.\nVuelve a solicitar el restablecimiento desde la aplicación móvil.",
+              "Ocurrió un error al actualizar la contraseña.\nVuelve a intentarlo más tarde.",
               "error"
             );
             btn.disabled = false;
