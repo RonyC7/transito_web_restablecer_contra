@@ -1,216 +1,226 @@
 <!DOCTYPE html>
 <html lang="es">
-    <head>
-        <meta charset="utf-8" />
-        <title>Restablecer contraseña - Transito La Esperanza</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <style>
-            body {
-                font-family: system-ui, -apple-system, BlinkMacSystemFont, "segoe UI", sans-serif;
-                background: #f4faf5;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                min-height: 100vh;
-                margin: 0;
-            }
-            .container {
-                max-width: 420px;
-                width: 100%;
-                padding: 16px;
-            }
-            .card {
-                background: #ffffff;
-                border-radius: 24px;
-                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-                padding: 24px 20px 28px 20px;
-            }
-            .logo {
-                text-align: center;
-                margin-bottom: 12px;
-            }
-            .logo img {
-                max-width: 96px;
-                border-radius: 16px;
-            }
-            h1 {
-                margin: 0 0 4px 0;
-                font-size: 22px;
-                text-align: left;
-                color: #111827;
-            }
-            .subtitle {
-                margin: 0 0 20px 0;
-                font-size: 14px;
-                color: #6b7280;
-            }
-            label {
-                display: block;
-                margin-bottom: 4px;
-                font-size: 13px;
-                color: #374151;
-            }
-            input {
-                width: 100%;
-                padding: 10px 12px;
-                border: 1px solid #d1d5db;
-                border-radius: 12px;
-                font-size: 14px;
-                outline: none;
-                box-sizing: border-box;
-            }
-            input:focus {
-                border-color: #1b8f3b;
-                box-shadow: 0 0 0 1px #1b8f3b33;
-            }
-            .field {
-                margin-bottom: 14px;
-            }
-            button {
-                width: 100%;
-                padding: 12px;
-                border-radius: 999px;
-                border: none;
-                background: #1b8f3b;
-                color: #ffffff;
-                font-size: 15px;
-                cursor: pointer;
-            }
-            button:disabled {
-                opacity: 0.7;
-                cursor: default;
-            }
-            .msg {
-                margin-top: 12px;
-                font-size: 13px;
-                white-space: pre-line;
-            }
-            .msg.error {
-                color: #b00020;
-            }
-            .msg.ok {
-                color: #1b8f3b;
-            }
-            .footer {
-                text-align: center;
-                margin-top: 18px;
-                font-size: 11px;
-                color: #9ca3af;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <div class="card">
-                <div class="logo">
-                    <img src="https://ertgodureebmsejgaovn.supabase.co/storage/v1/object/public/public-assets/municipalidad.jpeg"
-                        alt="Transito La Esperanza" />
-                </div>
-                <h1>Restablecer contraseña</h1>
-                <p class="subtitle">
-                    Ingresar una nueva contraseña.
-                </p>
-
-                <form id="form">
-                    <div class="field">
-                        <label for="password">Nueva contraseña</label>
-                        <input type="password" id="password" required />
-                    </div>
-                    <div class="field">
-                        <label for="confirm">Confirmar contraseña</label>
-                        <input type="password" id="confirm" required />
-                    </div>
-                    <button type="submit" id="btn">Guardar contraseña</button>
-                </form>
-
-                <div id="message" class="msg"></div>
-            </div>
-
-                <div class="footer">
-                    Sistema de reportes y monitoreo de tránsito . Municipalidad de la esperanza
-                </div>
+  <head>
+    <meta charset="utf-8" />
+    <title>Restablecer contraseña - Transito La Esperanza</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "segoe UI", sans-serif;
+        background: #f4faf5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        margin: 0;
+      }
+      .container {
+        max-width: 420px;
+        width: 100%;
+        padding: 16px;
+      }
+      .card {
+        background: #ffffff;
+        border-radius: 24px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        padding: 24px 20px 28px 20px;
+      }
+      .logo {
+        text-align: center;
+        margin-bottom: 12px;
+      }
+      .logo img {
+        max-width: 96px;
+        border-radius: 16px;
+      }
+      h1 {
+        margin: 0 0 4px 0;
+        font-size: 22px;
+        text-align: left;
+        color: #111827;
+      }
+      .subtitle {
+        margin: 0 0 20px 0;
+        font-size: 14px;
+        color: #6b7280;
+      }
+      label {
+        display: block;
+        margin-bottom: 4px;
+        font-size: 13px;
+        color: #374151;
+      }
+      input {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 12px;
+        font-size: 14px;
+        outline: none;
+        box-sizing: border-box;
+      }
+      input:focus {
+        border-color: #1b8f3b;
+        box-shadow: 0 0 0 1px #1b8f3b33;
+      }
+      .field {
+        margin-bottom: 14px;
+      }
+      button {
+        width: 100%;
+        padding: 12px;
+        border-radius: 999px;
+        border: none;
+        background: #1b8f3b;
+        color: #ffffff;
+        font-size: 15px;
+        cursor: pointer;
+      }
+      button:disabled {
+        opacity: 0.7;
+        cursor: default;
+      }
+      .msg {
+        margin-top: 12px;
+        font-size: 13px;
+        white-space: pre-line;
+      }
+      .msg.error {
+        color: #b00020;
+      }
+      .msg.ok {
+        color: #1b8f3b;
+      }
+      .footer {
+        text-align: center;
+        margin-top: 18px;
+        font-size: 11px;
+        color: #9ca3af;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="card">
+        <div class="logo">
+          <img
+            src="https://ertgodureebmsejgaovn.supabase.co/storage/v1/object/public/public-assets/municipalidad.jpeg"
+            alt="Transito La Esperanza"
+          />
         </div>
-            
-            <script type="module">
-  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+        <h1>Restablecer contraseña</h1>
+        <p class="subtitle">Ingresar una nueva contraseña.</p>
 
-  const supabaseUrl = 'https://ertgodureebmsejgaovn.supabase.co';
-  const supabaseKey = 'sb_publishable_U0q7bPNwTNHU6rvNaJ1fWg_hhdz-xOT';
+        <form id="form">
+          <div class="field">
+            <label for="password">Nueva contraseña</label>
+            <input type="password" id="password" required />
+          </div>
+          <div class="field">
+            <label for="confirm">Confirmar contraseña</label>
+            <input type="password" id="confirm" required />
+          </div>
+          <button type="submit" id="btn">Guardar contraseña</button>
+        </form>
 
-  const supabase = createClient(supabaseUrl, supabaseKey, {
-    auth: {
-      flowType: 'pkce',
-      detectSessionInUrl: true,
-      persistSession: false,
-    },
-  });
+        <div id="message" class="msg"></div>
+      </div>
 
-  const params = new URLSearchParams(window.location.search);
-  const code = params.get('code');
+      <div class="footer">
+        Sistema de reportes y monitoreo de tránsito . Municipalidad de la esperanza
+      </div>
+    </div>
 
-  const form = document.getElementById('form');
-  const passwordInput = document.getElementById('password');
-  const confirmInput = document.getElementById('confirm');
-  const messageEl = document.getElementById('message');
-  const btn = document.getElementById('btn');
+    <script type="module">
+      import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-  function setMessage(text, type) {
-    messageEl.textContent = text;
-    messageEl.className = 'msg ' + (type || '');
-  }
+      const supabaseUrl = "https://ertgodureebmsejgaovn.supabase.co";
+      const supabaseKey = "sb_publishable_U0q7bPNwTNHU6rvNaJ1fWg_hhdz-xOT";
 
-  if (!code) {
-    setMessage(
-      'Enlace inválido o incompleto.\nVuelve a solicitar el restablecimiento desde la aplicación móvil.',
-      'error'
-    );
-    form.style.display = 'none';
-  } else {
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      const pass = passwordInput.value.trim();
-      const confirm = confirmInput.value.trim();
-
-      if (pass.length < 6) {
-        setMessage(
-          'La contraseña debe tener al menos 6 caracteres.',
-          'error'
-        );
-        return;
-      }
-
-      if (pass !== confirm) {
-        setMessage('Las contraseñas no coinciden.', 'error');
-        return;
-      }
-
-      btn.disabled = true;
-      setMessage('Actualizando contraseña...', '');
-
-      // YA NO hacemos exchangeCodeForSession(code)
-      const { error: updateError } = await supabase.auth.updateUser({
-        password: pass,
+      const supabase = createClient(supabaseUrl, supabaseKey, {
+        auth: {
+          flowType: "pkce",
+          detectSessionInUrl: false,
+          persistSession: false,
+          autoRefreshToken: false,
+        },
       });
 
-      if (updateError) {
-        console.error('updateUser error', updateError);
-        setMessage(
-          'El enlace ya no es válido o ha expirado.\nVuelve a solicitar el restablecimiento desde la aplicación móvil.',
-          'error'
-        );
-        btn.disabled = false;
-        return;
+      const params = new URLSearchParams(window.location.search);
+      const code = params.get("code");
+
+      const form = document.getElementById("form");
+      const passwordInput = document.getElementById("password");
+      const confirmInput = document.getElementById("confirm");
+      const messageEl = document.getElementById("message");
+      const btn = document.getElementById("btn");
+
+      function setMessage(text, type) {
+        messageEl.textContent = text;
+        messageEl.className = "msg " + (type || "");
       }
 
-      setMessage(
-        'Contraseña actualizada correctamente.\nPuedes cerrar esta ventana y volver a la aplicación móvil para iniciar sesión.',
-        'ok'
-      );
-      form.style.display = 'none';
-    });
-  }
-</script>
+      if (!code) {
+        setMessage(
+          "Enlace inválido o incompleto.\nVuelve a solicitar el restablecimiento desde la aplicación móvil.",
+          "error"
+        );
+        form.style.display = "none";
+      } else {
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
 
-    </body>
+          const pass = passwordInput.value.trim();
+          const confirm = confirmInput.value.trim();
+
+          if (pass.length < 6) {
+            setMessage(
+              "La contraseña debe tener al menos 6 caracteres.",
+              "error"
+            );
+            return;
+          }
+
+          if (pass !== confirm) {
+            setMessage("Las contraseñas no coinciden.", "error");
+            return;
+          }
+
+          btn.disabled = true;
+          setMessage("Actualizando contraseña...", "");
+
+          const { error: exchangeError } =
+            await supabase.auth.exchangeCodeForSession(code);
+
+          if (exchangeError) {
+            setMessage(
+              "El enlace ya no es válido o ha expirado.\nVuelve a solicitar el restablecimiento desde la aplicación móvil.",
+              "error"
+            );
+            btn.disabled = false;
+            return;
+          }
+
+          const { error: updateError } = await supabase.auth.updateUser({
+            password: pass,
+          });
+
+          if (updateError) {
+            setMessage(
+              "Ocurrió un error al actualizar la contraseña.\nVuelve a solicitar el restablecimiento desde la aplicación móvil.",
+              "error"
+            );
+            btn.disabled = false;
+            return;
+          }
+
+          setMessage(
+            "Contraseña actualizada correctamente.\nPuedes cerrar esta ventana y volver a la aplicación móvil para iniciar sesión.",
+            "ok"
+          );
+          form.style.display = "none";
+        });
+      }
+    </script>
+  </body>
 </html>
